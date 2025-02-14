@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Digital Signage Display</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Digital Signage Content</h1>
+    <canvas id="canvas" width="1200" height="650"></canvas>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Request initial content from Electron
+            window.electron.sendMessage("request-content", 'send-data');
+
+            // Listen for content updates
+            window.electron.onReceiveMessage("update-content", (data) => {
+                const canvas = new fabric.Canvas("canvas");
+                const parsedData = JSON.parse(data)
+                console.log(parsedData)
+                const list = parsedData.objects
+                list.forEach(item => {
+                    console.log(item)
+                    if(item.type == 'Text'){
+                        const text = new fabric.Text(item.text, {...item, lockMovementX: true, lockMovementY: true,});
+                        canvas.add(text);
+                    }
+                    else if(item.type == 'Circle'){
+                        const circle = new fabric.Circle({...item, lockMovementX: true, lockMovementY: true,});
+                        canvas.add(circle);
+                    }else if(item.type == 'Triangle'){
+                        const triangle = new fabric.Triangle({...item, lockMovementX: true, lockMovementY: true,});
+                        canvas.add(triangle);
+                    }else if(item.type == 'Rect'){
+                        const rect = new fabric.Rect({...item, lockMovementX: true, lockMovementY: true,});
+                        canvas.add(rect);
+                    }
+                })
+            });
+        });
+    </script>
+</body>
+</html>
