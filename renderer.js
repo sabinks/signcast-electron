@@ -37,15 +37,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     function loadAllContent(data) {
         loadingOverlay.style.display = 'none';
-        document.getElementById('content-container').style.display = 'block'
+        document.getElementById('content-container').style.display = 'block';
+        const parsedData = JSON.parse(data)
+        console.log(parsedData);
+
         const canvas = new fabric.Canvas("canvas", {
             lockMovementX: true,
             lockMovementY: true,
+            width: parsedData.width,
+            height: parsedData.height,
             selection: false,
         });
-        const parsedData = JSON.parse(data)
         // screenName.innerHTML = `Screen Name: ${parsedData.name} (${parsedData.screenId})`
-        const list = parsedData.content.objects
         canvas.loadFromJSON(parsedData.content)
         canvas.requestRenderAll()
     }
