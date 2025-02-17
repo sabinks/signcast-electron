@@ -4,18 +4,29 @@
     "description": "",
     "main": "main.js",
     "scripts": {
-        "start": "electron .",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "dev": "NODE_ENV=development electron .",
+        "start": "NODE_ENV=production electron .",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "NODE_ENV=production electron-builder"
     },
-    "author": "",
+    "build": {
+        "linux": {
+            "target": [
+                "deb"
+            ]
+        }
+    },
+    "author": "sabinks <sabin.kr.stha@gmail.com>",
     "license": "ISC",
     "devDependencies": {
         "electron": "^34.2.0",
-        "socket.io-client": "^4.8.1"
+        "electron-builder": "^25.1.8",
+        "electron-reload": "^2.0.0-alpha.1",
+        "electron-reloader": "^1.2.3"
     },
     "dependencies": {
         "dotenv": "^16.4.7",
         "fs": "^0.0.1-security",
-        "ws": "^8.18.0"
+        "socket.io-client": "^4.8.1"
     }
 }
