@@ -13,7 +13,7 @@ const socket = io(process.env.SOCKET_URL, {
 const contentFile = "./cached_content.json";
 
 let win;
-
+let screenId = null;
 function createWindow() {
     win = new BrowserWindow({
         width: 1920,
@@ -34,10 +34,15 @@ app.on('ready', createWindow);
 app.on("window-all-closed", () => {
     if (process.platform !== "darwin") app.quit();
 });
-
+socket.on("connect", () => {
+    if (screenId) {
+        socket.emit('request-content', { screenId });
+    }
+})
 ipcMain.on('request-content', (event, data) => {
-    const { type, screenId } = data
+    const { type, screenId: id } = data
     if (type == 'send-data') {
+        screenId = id;
         console.log('Sending request to server for new data');
         socket.emit('request-content', { screenId });
     }
